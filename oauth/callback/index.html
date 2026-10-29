@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Return to Service Desk</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+         font-family: system-ui, sans-serif; background: #f2f2f7; color: #000; }
+  p { font-size: 15px; color: rgba(60,60,67,.6); margin: 0 0 24px; }
+  @media (prefers-color-scheme: dark) { body { background: #000; color: #fff; } p { color: rgba(235,235,245,.6); } }
+  main { max-width: 420px; padding: 24px; text-align: center; }
+  h1 { font-size: 22px; margin: 0 0 8px; }
+  a.button { display: block; padding: 15px; border-radius: 12px; background: #0088ff; color: #fff;
+             font-weight: 600; font-size: 17px; text-decoration: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">Signed in to Zendesk</h1>
+  <p id="msg">Tap below to finish signing in to Service Desk.</p>
+  <a class="button" id="open" href="#">Return to Service Desk</a>
+</main>
+<script>
+  // Zendesk redirects here (it only accepts https redirect URLs). Hand the result to the app via its
+  // private link. The authorization code is useless without the PKCE verifier kept inside the app.
+  // No analytics or third-party scripts on this page.
+  var q = window.location.search;
+  if (!q) {
+    document.getElementById("title").textContent = "Service Desk sign-in";
+    document.getElementById("msg").textContent = "Open Service Desk on your phone and tap Sign In with Zendesk.";
+    document.getElementById("open").style.display = "none";
+  } else {
+    var intentUrl = "intent://oauth/callback" + q + "#Intent;scheme=com.psygenics.servicedesk;end";
+    document.getElementById("open").href = intentUrl;
+    window.location.replace(intentUrl); // usually opens the app right away; the button is the backup
+  }
+</script>
+</body>
+</html>
